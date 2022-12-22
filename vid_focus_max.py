@@ -1,4 +1,5 @@
 import cv2
+import matplotlib.pyplot as plt
 
 
 # Open Video
@@ -29,6 +30,10 @@ max = -1
 fr_no = 0
 max_fr = -1
 
+
+fr_arr = []
+var_arr = []
+
 # Close Video
 out = cv2.VideoWriter('output.mp4',
                       cv2.VideoWriter_fourcc(*'MP4V'),
@@ -46,6 +51,10 @@ while (vid.isOpened()):
         gray = cv2.cvtColor(crp, cv2.COLOR_BGR2GRAY)
         lap = cv2.Laplacian(gray, cv2.CV_64F)
         var = round(lap.var(), 2)
+
+        fr_arr.append(float(fr_no))
+        var_arr.append(float(var))
+        
 
         if (max < var):
             max = var
@@ -65,6 +74,10 @@ while (vid.isOpened()):
 
     if cv2.waitKey(5) & 0xFF == ord('q'):
         break
+
+
+plt.plot(fr_arr, var_arr, color='b')
+plt.show()
 
 # Print Result and Exit
 print(max_fr)
